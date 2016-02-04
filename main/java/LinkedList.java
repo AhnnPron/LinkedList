@@ -1,62 +1,99 @@
 
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
-    import android.widget.LinearLayout;
-    public class LinkedList
+public class LinkedList
+{
+    private Node head;
+    private LinearLayout layout;
+
+    public LinkedList(LinearLayout layout)
     {
-        private Node head;
-        private LinearLayout layout;
+        this.head = null;
+        this.layout = layout;
+    }
 
-        public LinkedList(LinearLayout layout)
+    public void display()
+    {
+        //this.layout.removeAllViews();
+        if(this.head == null)
         {
-            this.head = null;
-            this.layout = layout;
+            View v = ListCore.inflater.inflate(R.layout.node, null);
+            TextView tf = (TextView) v.findViewById(R.id.theValueTF);
+            tf.setText("Empty List");
+            this.layout.addView(v);
         }
-
-        public void display()
+        else
         {
-            if(this.head == null)
-            {
-                System.out.println("Empty List");
-            }
-            else
-            {
-                //display the list in a reasonable format
-            }
-
-        public void addFront(String value)
-        {
-                if(this.getHead() == null)
-                {
-                    Node n = new Node(value);
-                    this.setHead(n);
-                }
-
-                else
-                {
-                    Node n = new Node(this.getHead().getPayload());
-                    n.setNextNode(this.getHead().getNextNode());
-                    Node newHead = new Node(value);
-                    newHead.setNextNode(n);
-                    this.setHead(newHead);
-                }
-            }
-
-        public Node removeFront()
-            {
-                if(this.head.getNextNode() == null)
-                {
-                    this.setHead(null);
-                    return null;
-                }
-
-                else
-                {
-                    Node n = new Node(this.getHead().getPayload());
-                    n.setNextNode(this.getHead().getNextNode());
-                    this.head = n.getNextNode();
-                    return n;
-                }
-            }
+            //display the list in a reasonable format
+            this.head.display(this.layout);
         }
+        View v = ListCore.inflater.inflate(R.layout.node, null);
+        TextView tf = (TextView) v.findViewById(R.id.theValueTF);
+        tf.setText("_____________");
+        this.layout.addView(v);
+    }
+
+    public void addFront(String value)
+    {
+        //this adds a new Node to the front of the list with payload == value
+        Node n = new Node(value);
+        n.setNextNode(this.head);
+        this.head = n;
+    }
+
+    public Node removeFront()
+    {
+        //this removes and returns the Node that is currently sitting at the
+        //front of the list.  The new front of the list, should be the old
+        //second node or null in the event it was a 1-list
+        Node nodeToReturn = this.head;
+        if(this.head != null)
+        {
+            this.head = this.head.getNextNode();
+        }
+        nodeToReturn.setNextNode(null);
+        return nodeToReturn;
+    }
+
+    public void addEnd (String value)
+        //this adds a new Node to the end of the list
+    {
+        if(this.head == null)
+        {
+            this.head = new Node(value);
+        }
+        else {
+            Node n = this.head;
+            while (n.getNextNode() != null) {
+                n = n.getNextNode();
+            }
+            Node l = new Node(value);
+            n.setNextNode(l);
+        }
+    }
+
+    public Node removeEnd()
+        //this removes and returns the Node that is currently sitting at the end of the list.
+        //The new end of the list should be the old second to last node.
+    {
+        if (this.head == null)
+        {
+            System.out.println("Empty List");
+        }
+        else
+        {
+            Node n = this.head;
+            Node l = this.head;
+            while(n.getNextNode() != null)
+            {
+                l = n;
+                n = n.getNextNode();
+            }
+            l.setNextNode(null);
+
+        }
+        return this.head;
     }
 }

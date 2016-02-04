@@ -1,4 +1,3 @@
-package com.example.awesomefat.linkedlist;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -7,6 +6,8 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+
+import com.example.awesomefat.linkedlist.R;
 
 public class MainActivity extends AppCompatActivity
 {
@@ -17,15 +18,25 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.activity_main);
 
+        ListCore.inflater = this.getLayoutInflater();
+
         LinearLayout svLL = (LinearLayout)this.findViewById(R.id.scrollViewLL);
         LinkedList ll = new LinkedList(svLL);
+        ll.addFront("1");
+        ll.addFront("2");
+        ll.addFront("3");
+        ll.addFront("4");
+        ll.display();
+        ll.removeFront();
         ll.display();
 
         /*
         View v;
-        for(int i = 0; i < 1000; i++)
+        for(int i = 0; i < 10; i++)
         {
             v = this.getLayoutInflater().inflate(R.layout.node, null);
+            TextView tf = (TextView) v.findViewById(R.id.theValueTF);
+            tf.setText("" + i);
             svLL.addView(v);
         }
         */
@@ -36,4 +47,3 @@ public class MainActivity extends AppCompatActivity
         //I want to change the text on my label
     }
 }
-
