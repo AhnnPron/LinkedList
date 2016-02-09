@@ -1,4 +1,6 @@
 
+
+
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -7,16 +9,17 @@ public class LinkedList
 {
     private Node head;
     private LinearLayout layout;
-
+    public int count;
     public LinkedList(LinearLayout layout)
     {
         this.head = null;
         this.layout = layout;
+        this.count = 0;
     }
 
     public void display()
     {
-        //this.layout.removeAllViews();
+        this.layout.removeAllViews();
         if(this.head == null)
         {
             View v = ListCore.inflater.inflate(R.layout.node, null);
@@ -35,12 +38,36 @@ public class LinkedList
         this.layout.addView(v);
     }
 
+    public Node getAtIndex(int i)
+    {
+        return null;
+    }
+
+    //inefficient, but accurate
+    public int count()
+    {
+        int count = 0;
+        if(head != null)
+        {
+            count++;
+            //at least one node in the list
+            Node currNode = head;
+            while(currNode.getNextNode() != null)
+            {
+                currNode = currNode.getNextNode();
+                count++;
+            }
+        }
+        return count;
+    }
+
     public void addFront(String value)
     {
         //this adds a new Node to the front of the list with payload == value
         Node n = new Node(value);
         n.setNextNode(this.head);
         this.head = n;
+        this.count++;
     }
 
     public Node removeFront()
@@ -52,48 +79,63 @@ public class LinkedList
         if(this.head != null)
         {
             this.head = this.head.getNextNode();
+            nodeToReturn.setNextNode(null);
+            this.count--;
         }
-        nodeToReturn.setNextNode(null);
+
         return nodeToReturn;
     }
 
-    public void addEnd (String value)
-        //this adds a new Node to the end of the list
+    public void addEnd(String value)
     {
         if(this.head == null)
         {
-            this.head = new Node(value);
+            this.addFront(value);
         }
-        else {
-            Node n = this.head;
-            while (n.getNextNode() != null) {
-                n = n.getNextNode();
+        else
+        {
+            Node n = new Node(value);
+            Node currNode = head;
+            while(currNode.getNextNode() != null)
+            {
+                currNode = currNode.getNextNode();
             }
-            Node l = new Node(value);
-            n.setNextNode(l);
+            //currNode is currently pointing at the last node in the list
+            currNode.setNextNode(n);
+            this.count++;
         }
     }
 
     public Node removeEnd()
-        //this removes and returns the Node that is currently sitting at the end of the list.
-        //The new end of the list should be the old second to last node.
     {
-        if (this.head == null)
+        if(head == null)
         {
-            System.out.println("Empty List");
+            return head;
         }
         else
         {
-            Node n = this.head;
-            Node l = this.head;
-            while(n.getNextNode() != null)
+            this.count--;
+            Node nodeToReturn = head;
+            //deal with the 1-list special case
+            if(head.getNextNode() == null)
             {
-                l = n;
-                n = n.getNextNode();
+                head = null;
+                return nodeToReturn;
             }
-            l.setNextNode(null);
-
+            else
+            {
+                //there are at least 2 nodes in the list
+                Node currNode = head;
+                while (currNode.getNextNode() != null && currNode.getNextNode().getNextNode() != null)
+                {
+                    currNode = currNode.getNextNode();
+                }
+                //currNode points to the Node right before the last node in the list
+                nodeToReturn = currNode.getNextNode();
+                currNode.setNextNode(null);
+                return nodeToReturn;
+            }
         }
-        return this.head;
     }
+
 }
